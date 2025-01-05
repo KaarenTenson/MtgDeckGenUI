@@ -8,6 +8,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.*;
 
+import javafx.application.Platform;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import netscape.javascript.JSObject;
@@ -26,8 +27,8 @@ public class Main extends Thread{
     String lands;
     String basiclandPro;
     boolean running=true;
-  DoubleProperty done=HelloApplication.doneProp;
-    public Main(String colors, String nonlandsearch, String landsearch, int decksize, Boolean kasRandom, String lands, String basiclandPro) {
+  DoubleProperty done;
+    public Main(String colors, String nonlandsearch, String landsearch, int decksize, Boolean kasRandom, String lands, String basiclandPro, DoubleProperty done) {
         this.colors = colors;
         this.nonlandsearch = nonlandsearch;
         this.landsearch = landsearch;
@@ -35,6 +36,7 @@ public class Main extends Thread{
         this.kasRandom = kasRandom;
         this.lands = lands;
         this.basiclandPro = basiclandPro;
+        this.done=done;
     }
 
     public void request(String url1, ArrayList<String> urlid, ArrayList<String> nimed, FileWriter writer){
@@ -81,6 +83,13 @@ public class Main extends Thread{
         } catch (Exception e) {
             System.out.println(e.toString());
         }
+    }
+    public void IncrementDoubleProperty(){
+        Platform.runLater(() -> {
+            // This will execute on the JavaFX Application Thread
+            done.set(done.getValue()+1);  // `value` can be your progress value based on the thread's work
+            System.out.println(done.getValue());
+        });
     }
     public void interrupt() {
         HelloApplication.SetTekst("Töö on Peatatud");
@@ -146,7 +155,8 @@ public class Main extends Thread{
                 currentThread().interrupt();
             }
             request((String) ("https://api.scryfall.com/cards/random?q="+nonlandsearch),urlid, nimed,writer);
-            done.setValue(done.getValue()+1);
+
+            IncrementDoubleProperty();
             if(!running){
                 return;
             }
@@ -158,7 +168,7 @@ public class Main extends Thread{
                 currentThread().interrupt();
             }
             request("https://api.scryfall.com/cards/random?q="+landsearch,urlid, nimed,writer);
-            done.setValue(done.getValue()+1);
+            IncrementDoubleProperty();
             if(!running){
                 return;
             }
@@ -187,7 +197,7 @@ public class Main extends Thread{
             basiccount++;
             request("https://api.scryfall.com/cards/random?q=Plains+-type%3Asnow+%28type%3Abasic+type%3APlains%29+%28game%3Apaper%29",urlid,nimed,writer);
             for (int i = 0; i < landid.get('W')-1; i++) {
-                done.setValue(done.getValue()+1);
+                IncrementDoubleProperty();
                 urlid.add(urlid.getLast());
                 nimed.add(nimed.getLast());
             }
@@ -210,7 +220,7 @@ public class Main extends Thread{
             for (int i = 0; i < landid.get('U')-1; i++) {
                 urlid.add(urlid.getLast());
                 nimed.add(nimed.getLast());
-                done.setValue(done.getValue()+1);
+                IncrementDoubleProperty();
             }
             if(!running){
                 return;
@@ -230,7 +240,7 @@ public class Main extends Thread{
             for (int i = 0; i < landid.get('B')-1; i++) {
                 urlid.add(urlid.getLast());
                 nimed.add(nimed.getLast());
-                done.setValue(done.getValue()+1);
+                IncrementDoubleProperty();
             }
             if(!running){
                 return;
@@ -251,7 +261,7 @@ public class Main extends Thread{
             for (int i = 0; i < landid.get('R')-1; i++) {
                 urlid.add(urlid.getLast());
                 nimed.add(nimed.getLast());
-                done.setValue(done.getValue()+1);
+                IncrementDoubleProperty();
             }
             if(!running){
                 return;
@@ -271,7 +281,7 @@ public class Main extends Thread{
             for (int i = 0; i < landid.get('G')-1; i++) {
                 urlid.add(urlid.getLast());
                 nimed.add(nimed.getLast());
-                done.setValue(done.getValue()+1);
+                IncrementDoubleProperty();
             }
             if(!running){
                 return;
@@ -330,7 +340,7 @@ public class Main extends Thread{
             }
 
         }
-        HelloApplication.SetTekst("Deck on Tehtud");
+        HelloApplication.SetTekst("Deck is made");
         try {
             writer.close();
         } catch (IOException e) {

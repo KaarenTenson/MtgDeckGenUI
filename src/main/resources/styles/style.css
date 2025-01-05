@@ -1,0 +1,87 @@
+/* Global settings */
+.root {
+    -fx-background-color: black;
+    -fx-font-family: "Arial", sans-serif;
+
+}
+
+h1 {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+
+}
+/* Styling for text fields */
+.text-field {
+    -fx-padding: 5px;
+    -fx-font-size: 14px;
+    -fx-pref-width: 200px;
+    -fx-background-color: white;
+    -fx-border-radius: 5px;
+    -fx-border-color: #ccc;
+}
+
+.text-field:focused {
+    -fx-border-color: #66afe9;
+    -fx-background-color: #fff;
+}
+
+/* Label Styling */
+.text {
+    -fx-fill:white;
+    -fx-font-size: 14px;
+    -fx-text-fill: #333;
+
+}
+.labels{
+       -fx-fill:white;
+}
+/* Spacing */
+.hbox {
+    -fx-spacing: 10px;
+}
+
+/* Styling for buttons */
+.button {
+    -fx-background-color: #4CAF50;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-padding: 10px;
+    -fx-border-radius: 5px;
+    -fx-pref-width: 100px;
+}
+
+.button:hover {
+    -fx-background-color: #45a049;
+}
+
+.button:pressed {
+    -fx-background-color: #3e8e41;
+}
+
+/* Progress bar */
+/*
+.progress-bar {
+    -fx-pref-width: 100%;
+    -fx-pref-height: 20px;
+    -fx-background-color: #ddd;
+}
+*/
+.progress-bar .bar {
+    -fx-background-color: #4CAF50;
+}
+
+/* Box for Request and Stop buttons */
+.hbox {
+    -fx-alignment: center;
+}
+
+/* Style the main VBox */
+.vbox {
+    -fx-spacing: 15px;
+    -fx-padding: 15px;
+}
+
+/* Add some margin between components */
+.vbox > .hbox {
+    -fx-margin-bottom: 10px;
+}
