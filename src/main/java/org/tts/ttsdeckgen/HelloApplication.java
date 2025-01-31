@@ -7,10 +7,13 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
+import java.util.ArrayList;
 
 public class HelloApplication extends Application {
 
@@ -18,9 +21,11 @@ public class HelloApplication extends Application {
     static DoubleProperty doneProp = new SimpleDoubleProperty();
     static Thread current;
     static Scene GlobalScene;
+    static ArrayList<Pane> notEasyPanes = new ArrayList<>();
     @Override
     public void start(Stage stage) throws Exception {
         // Create the main layout container (VBox)
+        tehtudtekst.getStyleClass().add("labels");
         VBox root = new VBox(10);
         root.setPadding(new javafx.geometry.Insets(15));
 
@@ -32,16 +37,21 @@ public class HelloApplication extends Application {
 
         // Land Count
         HBox landCountBox = createLabeledTextField("Land Count:", "landcountfield");
+        notEasyPanes.add(landCountBox);
 
         // Colors Box
         HBox colorsBox = createLabeledTextField("Colors:", "varvidfield");
+        notEasyPanes.add(colorsBox);
 
         // Nonbasic Land Percentage
         HBox nonBasicLandBox = createLabeledTextField("Nonbasic Land %:", "Protsent");
+        notEasyPanes.add(nonBasicLandBox);
 
         // URL Inputs
         HBox urlBox = createLabeledTextField("URL Nonland:", "url");
+        notEasyPanes.add(urlBox);
         HBox landUrlBox = createLabeledTextField("URL Land:", "Landurl");
+        notEasyPanes.add(landUrlBox);
 
         // Progress Bar
         HBox progressBox = new HBox();
@@ -78,10 +88,32 @@ public class HelloApplication extends Application {
     private HBox createCheckBox(String label, String id) {
         HBox box = new HBox(10);
         Text labelText = new Text(label);
+        labelText.getStyleClass().add("labels");
         CheckBox checkBox = new CheckBox();
         checkBox.setId(id);
         box.getChildren().addAll(labelText, checkBox);
+        checkBox.setOnAction(getCheckBoxAction());
         return box;
+    }
+    EventHandler<ActionEvent> getCheckBoxAction() {
+        return new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                if (event.getSource() instanceof CheckBox) {
+                    CheckBox chk = (CheckBox) event.getSource();
+                    if(chk.isSelected()) {
+                        for (Pane pane : notEasyPanes) {
+                            pane.setVisible(false);
+                        }
+                    }else{
+                        for (Pane pane : notEasyPanes) {
+                            pane.setVisible(true);
+                        }
+                    }
+                }
+            }
+        };
+
     }
 
     private HBox createButtonBox(ProgressBar prog) {
@@ -96,11 +128,24 @@ public class HelloApplication extends Application {
                 if (current == null || !current.isAlive()) {
                     tehtudtekst.setText("");
                     doneProp.setValue(1);
-
-                    prog.progressProperty().bind(doneProp.divide(Double.parseDouble(getTextFieldValue("suurus"))));
-                    Main thread = new Main(getTextFieldValue("varvidfield"), getTextFieldValue("url"), getTextFieldValue("Landurl"),
-                            Integer.parseInt(getTextFieldValue("suurus")), getCheckBoxValue("RandomCheck"),
-                            getTextFieldValue("landcountfield"), getTextFieldValue("Protsent"), doneProp);
+                    requestData reData;
+                    try{
+                    reData=new requestData(
+                            getTextFieldValue("suurus"),
+                            getCheckBoxValue("RandomCheck"),
+                            getTextFieldValue("varvidfield"),
+                            getTextFieldValue("landcountfield"),
+                            getTextFieldValue("Protsent"),
+                            getTextFieldValue("url"),
+                            getTextFieldValue("Landurl")
+                            );
+                    }catch (parseRequestError ex){
+                        System.out.println("error");
+                        tehtudtekst.setText(ex.getMessage());
+                        return;
+                    }
+                    prog.progressProperty().bind(doneProp.divide(reData.deckSize));
+                    Main thread = new Main(reData, doneProp);
                     current = thread;
                     thread.start();
                 }

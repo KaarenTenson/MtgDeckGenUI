@@ -27,6 +27,7 @@ h1 {
 
 /* Label Styling */
 .text {
+    -fx-background-color: white;
     -fx-fill:white;
     -fx-font-size: 14px;
     -fx-text-fill: #333;

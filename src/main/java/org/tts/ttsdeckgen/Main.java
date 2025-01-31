@@ -22,20 +22,11 @@ public class Main extends Thread{
     String colors;
     String nonlandsearch;
     String landsearch;
-    int decksize;
-    Boolean kasRandom;
-    String lands;
-    String basiclandPro;
+    requestData reData;
     boolean running=true;
   DoubleProperty done;
-    public Main(String colors, String nonlandsearch, String landsearch, int decksize, Boolean kasRandom, String lands, String basiclandPro, DoubleProperty done) {
-        this.colors = colors;
-        this.nonlandsearch = nonlandsearch;
-        this.landsearch = landsearch;
-        this.decksize = decksize;
-        this.kasRandom = kasRandom;
-        this.lands = lands;
-        this.basiclandPro = basiclandPro;
+    public Main(requestData reData,DoubleProperty done) {
+        this.reData=reData;
         this.done=done;
     }
 
@@ -99,47 +90,24 @@ public class Main extends Thread{
     public void run(){
         ArrayList<String> nimed = new ArrayList<String>();  /////////llist kaartidde nimede jaoks
         ArrayList<String> urlid = new ArrayList<String>();  //////////list kaartide urlide jaoks
-        int LandsCount=0;
-        int basicp=30;
-        char[] varvid={'W','U','B','G','R'};
         Scanner s = new Scanner(System.in);
 
-        if(!kasRandom) {
-            try{
-                LandsCount = Integer.parseInt(lands);
-                basicp = Integer.parseInt(basiclandPro);
-            }catch (RuntimeException e){
-                System.out.println(e.toString());
-                LandsCount=(int)(decksize*0.4);
-            }
+        colors=new String(reData.colours);
+        System.out.println(colors);
+        nonlandsearch="-type%3Aland+commander%3A"+colors+"+%28game%3Apaper%29";
+        //nonlandsearch="-type%3Aland+color<%3DWU+%28game%3Apaper%29";
+        landsearch="type%3Aland+commander%3A"+colors+"+%28game%3Apaper%29";
 
-        }
-        else{
-            LandsCount=(int)(decksize*0.4);
-            Random rand=new Random();
-            StringBuilder build=new StringBuilder();
-            while (build.length()<2){
-                char varv=varvid[rand.nextInt(varvid.length)];
-                if(build.isEmpty() ||build.charAt(0)!=varv){
-                    build.append(varv);
-                }
-            }
-            colors=build.toString();
-            nonlandsearch="-type%3Aland+commander%3A"+colors+"+%28game%3Apaper%29";
-            //nonlandsearch="-type%3Aland+color<%3DWU+%28game%3Apaper%29";
-            landsearch="type%3Aland+commander%3A"+colors+"+%28game%3Apaper%29";
-
-        }
         if(!running){
             return;
         }
-        int nonlands = decksize-LandsCount;
-        System.out.println(nonlands);
-        float protent = basicp/100.0f;
-        int nonbasiclands = (int)(LandsCount*protent);
-        System.out.println(nonbasiclands);
-        int basiclands = LandsCount-nonbasiclands;
-        System.out.println(basiclands);
+        int nonlands = reData.deckSize-reData.landCount;
+        System.out.println("nonalands:"+nonlands);
+        float protsent = reData.nonBasicLandProcent;
+        int nonbasiclands = (int)(reData.landCount*protsent);
+        System.out.println("nonbasicLand"+nonbasiclands);
+        int basiclands = reData.landCount-nonbasiclands;
+        System.out.println("basicLands"+basiclands);
         File file = new File("decklist.txt");
         FileWriter writer = null;
         try {
@@ -154,7 +122,7 @@ public class Main extends Thread{
             } catch (InterruptedException e) {
                 currentThread().interrupt();
             }
-            request((String) ("https://api.scryfall.com/cards/random?q="+nonlandsearch),urlid, nimed,writer);
+            request((String) ("https://api.scryfall.com/cards/random?q="+ reData.nonLandURL),urlid, nimed,writer);
 
             IncrementDoubleProperty();
             if(!running){
@@ -167,7 +135,7 @@ public class Main extends Thread{
             } catch (InterruptedException e) {
                 currentThread().interrupt();
             }
-            request("https://api.scryfall.com/cards/random?q="+landsearch,urlid, nimed,writer);
+            request("https://api.scryfall.com/cards/random?q="+reData.LandURL,urlid, nimed,writer);
             IncrementDoubleProperty();
             if(!running){
                 return;
