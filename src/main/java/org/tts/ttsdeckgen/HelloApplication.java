@@ -26,6 +26,7 @@ public class HelloApplication extends Application {
     public void start(Stage stage) throws Exception {
         // Create the main layout container (VBox)
         tehtudtekst.getStyleClass().add("labels");
+
         VBox root = new VBox(10);
         root.setPadding(new javafx.geometry.Insets(15));
 
@@ -33,15 +34,16 @@ public class HelloApplication extends Application {
         HBox deckSizeBox = createLabeledTextField("Deck Size:", "suurus");
 
         // Random Check
-        HBox randomCheckBox = createCheckBox("Easy:", "RandomCheck");
+        HBox randomCheckBox = createCheckBox("Random:", "RandomCheck");
 
         // Land Count
         HBox landCountBox = createLabeledTextField("Land Count:", "landcountfield");
         notEasyPanes.add(landCountBox);
 
         // Colors Box
-        HBox colorsBox = createLabeledTextField("Colors:", "varvidfield");
-        notEasyPanes.add(colorsBox);
+
+        HBox newColorBox=createColorCheckBoxes();
+        notEasyPanes.add(newColorBox);
 
         // Nonbasic Land Percentage
         HBox nonBasicLandBox = createLabeledTextField("Nonbasic Land %:", "Protsent");
@@ -62,7 +64,7 @@ public class HelloApplication extends Application {
         HBox buttonBox = createButtonBox(prog);
 
         // Add all elements to root container
-        root.getChildren().addAll(deckSizeBox, randomCheckBox, landCountBox, colorsBox, nonBasicLandBox, urlBox, landUrlBox, progressBox, buttonBox, tehtudtekst);
+        root.getChildren().addAll(deckSizeBox, randomCheckBox, landCountBox, newColorBox,nonBasicLandBox, urlBox, landUrlBox, progressBox, buttonBox, tehtudtekst);
 
         // Create the Scene
         Scene scene = new Scene(root, 400, 450);
@@ -74,7 +76,26 @@ public class HelloApplication extends Application {
         stage.setScene(scene);
         stage.show();
     }
-
+    private HBox createColorCheckBoxes(){
+        HBox box = new HBox();
+        CheckBox gCheck=new CheckBox("");
+        gCheck.getStyleClass().add("green");
+        gCheck.setId("green");
+        CheckBox bCheck=new CheckBox("");
+        bCheck.getStyleClass().add("black");
+        bCheck.setId("black");
+        CheckBox wCheck=new CheckBox("");
+        wCheck.getStyleClass().add("white");
+        wCheck.setId("white");
+        CheckBox uCheck=new CheckBox("");
+        uCheck.getStyleClass().add("blue");
+        uCheck.setId("blue");
+        CheckBox rCheck=new CheckBox("");
+        rCheck.getStyleClass().add("red");
+        rCheck.setId("red");
+        box.getChildren().addAll(gCheck,bCheck,wCheck,uCheck,rCheck);
+        return box;
+    }
     private HBox createLabeledTextField(String label, String id) {
         HBox box = new HBox(10);
         Text labelText = new Text(label);
@@ -90,6 +111,7 @@ public class HelloApplication extends Application {
         Text labelText = new Text(label);
         labelText.getStyleClass().add("labels");
         CheckBox checkBox = new CheckBox();
+        checkBox.getStyleClass().add("easy-check-box");
         checkBox.setId(id);
         box.getChildren().addAll(labelText, checkBox);
         checkBox.setOnAction(getCheckBoxAction());
@@ -129,11 +151,16 @@ public class HelloApplication extends Application {
                     tehtudtekst.setText("");
                     doneProp.setValue(1);
                     requestData reData;
+                    String color=(getCheckBoxValue("black") ? "black" : "")+
+                            (getCheckBoxValue("white") ? "white": "") +
+                            (getCheckBoxValue("green") ? "green" : "")+
+                            (getCheckBoxValue("blue") ? "blue" : "") +
+                            (getCheckBoxValue("red") ? "red" : "");
                     try{
                     reData=new requestData(
                             getTextFieldValue("suurus"),
                             getCheckBoxValue("RandomCheck"),
-                            getTextFieldValue("varvidfield"),
+                            color,
                             getTextFieldValue("landcountfield"),
                             getTextFieldValue("Protsent"),
                             getTextFieldValue("url"),

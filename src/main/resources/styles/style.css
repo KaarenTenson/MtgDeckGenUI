@@ -86,3 +86,96 @@ h1 {
 .vbox > .hbox {
     -fx-margin-bottom: 10px;
 }
+/* Checkbox Box (Unchecked State) */
+/* Base Checkbox Styling */
+/* Base Checkbox Styling */
+.check-box > .box {
+    -fx-min-width: 50px;   /* Increased width */
+    -fx-min-height: 50px;  /* Increased height */
+    -fx-max-width: 50px;
+    -fx-max-height: 50px;
+    -fx-background-insets: 2;
+    -fx-background-radius: 6;
+    -fx-border-width: 3;  /* Slightly thicker border for better visibility */
+    -fx-border-radius: 6;
+    -fx-background-color: transparent;
+}
+
+/* Check Mark Icon Styling */
+.check-box > .box > .mark {
+    -fx-background-position: center;
+    -fx-background-size: 90%;  /* Scale icon to fit properly */
+    -fx-background-repeat: no-repeat;
+    -fx-shape: none;
+    -fx-background-color: transparent;
+}
+
+/* Blue Checkbox */
+.check-box.blue > .box {
+    -fx-border-color: #0078D7;
+}
+.check-box.blue:selected > .box {
+    -fx-background-color: #0078D7;
+}
+.check-box.blue > .box > .mark {
+    -fx-background-image: url("svg/u.png");
+}
+
+/* Green Checkbox */
+.check-box.green > .box {
+    -fx-border-color: #28A745;
+}
+.check-box.green:selected > .box {
+    -fx-background-color: #28A745;
+}
+.check-box.green > .box > .mark {
+    -fx-background-image: url("svg/g.png");
+}
+
+/* Red Checkbox */
+.check-box.red > .box {
+    -fx-border-color: #DC3545;
+}
+.check-box.red:selected > .box {
+    -fx-background-color: #DC3545;
+}
+.check-box.red > .box > .mark {
+    -fx-background-image: url("svg/r.png");
+}
+
+/* White Checkbox */
+.check-box.white > .box {
+    -fx-border-color: #E0E0E0;
+}
+.check-box.white:selected > .box {
+    -fx-background-color: #FFFFFF;
+}
+.check-box.white > .box > .mark {
+    -fx-background-image: url("svg/w.png");
+}
+
+/* Black Checkbox */
+.check-box.black > .box {
+    -fx-border-color: #301225;
+}
+.check-box.black:selected > .box {
+    -fx-background-color: #301225;
+}
+.check-box.black > .box > .mark {
+    -fx-background-image: url("svg/b.png");
+}
+
+.easy-check-box{
+    -fx-background-color: white;
+    -fx-min-width: 16px;   /* Increased width */
+    -fx-min-height: 16px;  /* Increased height */
+    -fx-max-width: 16px;
+    -fx-max-height: 16px;
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: 90%;
+    -fx-background-image: url("svg/tap.png");
+}
+.easy-check-box:selected {
+    -fx-background-image: url("svg/untap.png");
+}
