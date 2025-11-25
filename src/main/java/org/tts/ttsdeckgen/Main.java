@@ -15,9 +15,10 @@ import javafx.application.Platform;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import netscape.javascript.JSObject;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.util.Random;
@@ -49,30 +50,31 @@ public class Main extends Thread{
                 StringBuilder informationstring = new StringBuilder();
                 Scanner scanner = new Scanner(url.openStream());
 
+                StringBuilder json = new StringBuilder();
+
                 while (scanner.hasNext()) {
-                    informationstring.append(scanner.nextLine());
+                    json.append(scanner.nextLine());
                 }
                 scanner.close();
 
-                JSONParser parser = new JSONParser();
-                JSONObject card = (JSONObject) parser.parse(String.valueOf(informationstring));
+                // Parse with Gson
+                JsonObject card = JsonParser.parseString(json.toString()).getAsJsonObject();
 
-
-                String name = (String) card.get("name");
-
-                writer.write(name+"\n");
-                System.out.println(name);
+                // Extract name
+                String name = card.get("name").getAsString();
+                writer.write(name + "\n");
                 nimed.add(name);
+                System.out.println(name);
 
-                if (card.get("image_uris")!=null){
-                    JSONObject yes = (JSONObject)card.get("image_uris");
-                    urlid.add((String) yes.get("normal"));
-                }
-                else{
-                    JSONArray imageeforflip = (JSONArray) card.get("card_faces");
-                    JSONObject fimagee = (JSONObject) imageeforflip.get(0);
-                    fimagee = (JSONObject) fimagee.get("image_uris");
-                    urlid.add((String) fimagee.get("normal"));
+                // Extract image URL
+                if (card.has("image_uris") && card.get("image_uris").isJsonObject()) {
+                    JsonObject img = card.getAsJsonObject("image_uris");
+                    urlid.add(img.get("normal").getAsString());
+                } else if (card.has("card_faces")) {
+                    JsonArray faces = card.getAsJsonArray("card_faces");
+                    JsonObject front = faces.get(0).getAsJsonObject();
+                    JsonObject img = front.getAsJsonObject("image_uris");
+                    urlid.add(img.get("normal").getAsString());
                 }
             }
 
