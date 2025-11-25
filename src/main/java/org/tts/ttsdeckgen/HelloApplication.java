@@ -151,11 +151,11 @@ public class HelloApplication extends Application {
                     tehtudtekst.setText("");
                     doneProp.setValue(1);
                     requestData reData;
-                    String color=(getCheckBoxValue("black") ? "black" : "")+
-                            (getCheckBoxValue("white") ? "white": "") +
-                            (getCheckBoxValue("green") ? "green" : "")+
-                            (getCheckBoxValue("blue") ? "blue" : "") +
-                            (getCheckBoxValue("red") ? "red" : "");
+                    String color=(getCheckBoxValue("black") ? "B" : "")+
+                            (getCheckBoxValue("white") ? "W": "") +
+                            (getCheckBoxValue("green") ? "G" : "")+
+                            (getCheckBoxValue("blue") ? "U" : "") +
+                            (getCheckBoxValue("red") ? "R" : "");
                     try{
                     reData=new requestData(
                             getTextFieldValue("suurus"),

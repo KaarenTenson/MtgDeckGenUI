@@ -1,5 +1,7 @@
 package org.tts.ttsdeckgen;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 public class requestData {
@@ -76,6 +78,7 @@ public class requestData {
                 continue;
             }
             coloursArr[i] = Character.toUpperCase(coloursArr[i]);
+            System.out.println(Arrays.toString(coloursArr));
             switch (coloursArr[i]) {
                 case 'G':
                     break;

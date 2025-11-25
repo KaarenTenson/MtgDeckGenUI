@@ -5,7 +5,10 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.net.URI;
 import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import javafx.application.Platform;
@@ -30,9 +33,11 @@ public class Main extends Thread{
         this.done=done;
     }
 
-    public void request(String url1, ArrayList<String> urlid, ArrayList<String> nimed, FileWriter writer){
+    public void request(String url1, ArrayList<String> urlid, String params, ArrayList<String> nimed, FileWriter writer){
         try {
-            URL url = new URL(url1);
+            String encodedParams = URLEncoder.encode(params, StandardCharsets.UTF_8);
+            URL url = new URI(url1 + encodedParams).toURL();
+
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             conn.connect();
@@ -122,7 +127,7 @@ public class Main extends Thread{
             } catch (InterruptedException e) {
                 currentThread().interrupt();
             }
-            request((String) ("https://api.scryfall.com/cards/random?q="+ reData.nonLandURL),urlid, nimed,writer);
+            request("https://api.scryfall.com/cards/random?",urlid, "q=" +reData.nonLandURL, nimed,writer);
 
             IncrementDoubleProperty();
             if(!running){
@@ -135,7 +140,7 @@ public class Main extends Thread{
             } catch (InterruptedException e) {
                 currentThread().interrupt();
             }
-            request("https://api.scryfall.com/cards/random?q="+reData.LandURL,urlid, nimed,writer);
+            request("https://api.scryfall.com/cards/random?",urlid, "q="+reData.LandURL, nimed,writer);
             IncrementDoubleProperty();
             if(!running){
                 return;
@@ -163,7 +168,7 @@ public class Main extends Thread{
                 System.out.println(e.toString());
             }
             basiccount++;
-            request("https://api.scryfall.com/cards/random?q=Plains+-type%3Asnow+%28type%3Abasic+type%3APlains%29+%28game%3Apaper%29",urlid,nimed,writer);
+            request("https://api.scryfall.com/cards/random?q=Plains+-type%3Asnow+%28type%3Abasic+type%3APlains%29+%28game%3Apaper%29",urlid,"",nimed,writer);
             for (int i = 0; i < landid.get('W')-1; i++) {
                 IncrementDoubleProperty();
                 urlid.add(urlid.getLast());
@@ -183,7 +188,7 @@ public class Main extends Thread{
                 System.out.println(e.toString());
             }
             basiccount++;
-            request("https://api.scryfall.com/cards/random?q=Island+-type%3Asnow+%28type%3Abasic+type%3AIsland%29+%28game%3Apaper%29",urlid,nimed,writer);
+            request("https://api.scryfall.com/cards/random?q=Island+-type%3Asnow+%28type%3Abasic+type%3AIsland%29+%28game%3Apaper%29",urlid, "",nimed,writer);
 
             for (int i = 0; i < landid.get('U')-1; i++) {
                 urlid.add(urlid.getLast());
@@ -204,7 +209,7 @@ public class Main extends Thread{
                 System.out.println(e.toString());
             }
             basiccount++;
-            request("https://api.scryfall.com/cards/random?q=Swamp+-type%3Asnow+%28type%3Abasic+type%3ASwamp%29+%28game%3Apaper%29",urlid,nimed,writer);
+            request("https://api.scryfall.com/cards/random?q=Swamp+-type%3Asnow+%28type%3Abasic+type%3ASwamp%29+%28game%3Apaper%29",urlid,"",nimed,writer);
             for (int i = 0; i < landid.get('B')-1; i++) {
                 urlid.add(urlid.getLast());
                 nimed.add(nimed.getLast());
@@ -225,7 +230,7 @@ public class Main extends Thread{
             }
 
             basiccount++;
-            request("https://api.scryfall.com/cards/random?q=Mountain+-type%3Asnow+%28type%3Abasic+type%3AMountain%29+%28game%3Apaper%29",urlid,nimed,writer);
+            request("https://api.scryfall.com/cards/random?q=Mountain+-type%3Asnow+%28type%3Abasic+type%3AMountain%29+%28game%3Apaper%29",urlid,"",nimed,writer);
             for (int i = 0; i < landid.get('R')-1; i++) {
                 urlid.add(urlid.getLast());
                 nimed.add(nimed.getLast());
@@ -245,7 +250,7 @@ public class Main extends Thread{
                 System.out.println(e.toString());
             }
             basiccount++;
-            request("https://api.scryfall.com/cards/random?q=Forest+-type%3Asnow+%28type%3Abasic+type%3AForest%29+%28game%3Apaper%29",urlid,nimed,writer);
+            request("https://api.scryfall.com/cards/random?q=Forest+-type%3Asnow+%28type%3Abasic+type%3AForest%29+%28game%3Apaper%29",urlid,"",nimed,writer);
             for (int i = 0; i < landid.get('G')-1; i++) {
                 urlid.add(urlid.getLast());
                 nimed.add(nimed.getLast());
