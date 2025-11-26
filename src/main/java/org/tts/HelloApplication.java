@@ -1,4 +1,4 @@
-package org.tts.ttsdeckgen;
+package org.tts;
 
 import javafx.application.Application;
 import javafx.beans.property.DoubleProperty;
@@ -12,6 +12,7 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
 
 import java.util.ArrayList;
 
@@ -157,15 +158,15 @@ public class HelloApplication extends Application {
                             (getCheckBoxValue("blue") ? "U" : "") +
                             (getCheckBoxValue("red") ? "R" : "");
                     try{
-                    reData=new requestData(
-                            getTextFieldValue("suurus"),
-                            getCheckBoxValue("RandomCheck"),
-                            color,
-                            getTextFieldValue("landcountfield"),
-                            getTextFieldValue("Protsent"),
-                            getTextFieldValue("url"),
-                            getTextFieldValue("Landurl")
-                            );
+                        reData=new requestData(
+                                getTextFieldValue("suurus"),
+                                getCheckBoxValue("RandomCheck"),
+                                color,
+                                getTextFieldValue("landcountfield"),
+                                getTextFieldValue("Protsent"),
+                                getTextFieldValue("url"),
+                                getTextFieldValue("Landurl")
+                        );
                     }catch (parseRequestError ex){
                         System.out.println("error");
                         tehtudtekst.setText(ex.getMessage());

@@ -1,4 +1,4 @@
-package org.tts.ttsdeckgen;
+package org.tts;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;

@@ -1,4 +1,4 @@
-package org.tts.ttsdeckgen;
+package org.tts;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -28,7 +28,7 @@ public class Main extends Thread{
     String landsearch;
     requestData reData;
     boolean running=true;
-  DoubleProperty done;
+    DoubleProperty done;
     public Main(requestData reData,DoubleProperty done) {
         this.reData=reData;
         this.done=done;

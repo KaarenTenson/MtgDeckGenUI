@@ -1,4 +1,4 @@
-package org.tts.ttsdeckgen;
+package org.tts;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -32,7 +32,7 @@ public class requestData {
             throw new parseRequestError("Land count cannot be greater than deck size");
         }
         try{
-        this.nonBasicLandProcent = Float.parseFloat(nonBasicLandProcent);
+            this.nonBasicLandProcent = Float.parseFloat(nonBasicLandProcent);
         }catch (NumberFormatException e) {
             throw new parseRequestError("Non basic landprocent must be an number");
         }
@@ -92,7 +92,7 @@ public class requestData {
                     break;
 
                 default:
-                throw new parseRequestError("wrong color");
+                    throw new parseRequestError("wrong color");
             }
         }
         return coloursArr;
